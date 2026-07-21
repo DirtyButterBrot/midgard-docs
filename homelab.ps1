@@ -143,7 +143,13 @@ do {
         "Z" { Start-Process "http://10.0.0.251:9696" }
         "T" { Start-Process "http://10.0.0.251:8181" }
         "B" { Start-Process "http://10.0.0.251:8082" }
-        "W" { Start-Process "http://10.0.0.251:8086/v1/update" }
+        "W" { 
+            Write-Host -ForegroundColor Yellow "Sende manuellen Update-Befehl an Watchtower..."
+            $headers = @{ "Authorization" = "Bearer valhalla" }
+            Invoke-RestMethod -Uri "http://10.0.0.251:8086/v1/update" -Method Get -Headers $headers
+            Write-Host -ForegroundColor Green "Update-Check erfolgreich angestoßen!"
+            Start-Sleep -Seconds 2
+        }
         "H" { Write-Host -ForegroundColor Yellow "Starting SSH session to Valhalla (Proxmox root)..." }
         '3' { Start-Process "http://${MidgardIP}:81" }
         '4' { Start-Process "http://${MidgardIP}:4000" }
