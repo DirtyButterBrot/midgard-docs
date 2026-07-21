@@ -39,6 +39,7 @@
 | **Nginx Proxy Manager** | [http://10.0.0.251:81](http://10.0.0.251:81) | Reverse Proxy Admin | Docker Container |
 | **Dockge Manager** | [http://10.0.0.251:5001](http://10.0.0.251:5001) | Compose Stack Manager | Docker Container |
 | **Dashy Dashboard** | [http://10.0.0.251:4000](http://10.0.0.251:4000) | Central Dashboard | Docker Container |
+| **Watchtower** | [http://10.0.0.251:8086](http://10.0.0.251:8086) | Auto-Updater API | Docker Container |
 | **Authelia Auth** | [http://10.0.0.251:9091](http://10.0.0.251:9091) | SSO Engine | Docker Container |
 | **Plex Media Server** | [http://10.0.0.251:32400/web](http://10.0.0.251:32400/web) | Media Server | Docker Container |
 | **Router (Gateway)** | [http://10.0.0.199](http://10.0.0.199) | Network Router | Local Hardware |
@@ -65,6 +66,7 @@
 * `/opt/stacks/birdnet` $\rightarrow$ BirdNET Bird Analyzer (`docker-compose.yml`)
 * `/opt/stacks/tailscale` $\rightarrow$ Tailscale Subnet Router (`bifroest` - `docker-compose.yml`)
 * `/opt/stacks/uptime-kuma` $\rightarrow$ Uptime Kuma Monitoring (`docker-compose.yml`)
+* `/opt/stacks/watchtower` $\rightarrow$ Auto-Updater (`docker-compose.yml`)
 * `/opt/stacks/dashy` $\rightarrow$ Dashy Dashboard (`my-conf.yml`, `docker-compose.yml`)
 * `/opt/stacks/authelia` $\rightarrow$ Authelia SSO (`config/configuration.yml`, `users_database.yml`)
 * `/opt/stacks/npm` $\rightarrow$ Nginx Proxy Manager

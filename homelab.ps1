@@ -14,8 +14,11 @@ $Domain    = "valhalla-lab.duckdns.org"
 function Show-Header {
     Clear-Host
     Write-Host "======================================================================" -ForegroundColor Cyan
-    Write-Host "                    VALHALLA HOMELAB CONTROL CENTER                   " -ForegroundColor Yellow
-    Write-Host "                    Domain: $Domain                      " -ForegroundColor DarkCyan
+    Write-Host " [O] Overseerr                [S] SABnzbd"
+    Write-Host " [Z] Prowlarr                 [T] Tautulli"
+    Write-Host " [B] BirdNET Analyzer         [W] Watchtower API"
+    Write-Host ""
+    Write-Host " [H] SSH to Valhalla (Proxmox)  [Q] Quit" -ForegroundColor DarkCyan
     Write-Host "======================================================================" -ForegroundColor Cyan
     Write-Host ""
 }
@@ -134,6 +137,14 @@ do {
     switch ($choice) {
         '1' { Write-Host "Verbinde per SSH zu odin@$MidgardIP..." -ForegroundColor Cyan; ssh odin@$MidgardIP }
         '2' { Write-Host "Verbinde per SSH zu root@$ProxmoxIP..." -ForegroundColor Cyan; ssh root@$ProxmoxIP }
+        "P" { Start-Process "http://10.0.0.251:32400/web" }
+        "O" { Start-Process "http://10.0.0.251:5055" }
+        "S" { Start-Process "http://10.0.0.251:8085" }
+        "Z" { Start-Process "http://10.0.0.251:9696" }
+        "T" { Start-Process "http://10.0.0.251:8181" }
+        "B" { Start-Process "http://10.0.0.251:8082" }
+        "W" { Start-Process "http://10.0.0.251:8086/v1/update" }
+        "H" { Write-Host -ForegroundColor Yellow "Starting SSH session to Valhalla (Proxmox root)..." }
         '3' { Start-Process "http://${MidgardIP}:81" }
         '4' { Start-Process "http://${MidgardIP}:4000" }
         '5' { Start-Process "http://${MidgardIP}:5001" }
