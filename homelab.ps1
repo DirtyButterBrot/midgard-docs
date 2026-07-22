@@ -157,19 +157,19 @@ do {
         '6' { Start-Process "http://${MidgardIP}:3001" }
         '7' { Start-Process "http://${MidgardIP}:8082" }
         '8' { Start-Process "http://${MidgardIP}:9091" }
-        'T', 't' { Start-Process "http://${MidgardIP}:8181" }
-        'O', 'o' { Start-Process "http://${MidgardIP}:5055" }
-        'R', 'r' { Start-Process "http://${MidgardIP}:7878" }
-        'N', 'n' { Start-Process "http://${MidgardIP}:8989" }
-        'Z', 'z' { Start-Process "http://${MidgardIP}:8085" }
-        'P', 'p' { Start-Process "http://${MidgardIP}:9696" }
+        't' { Start-Process "http://${MidgardIP}:8181" }
+        'o' { Start-Process "http://${MidgardIP}:5055" }
+        'r' { Start-Process "http://${MidgardIP}:7878" }
+        'n' { Start-Process "http://${MidgardIP}:8989" }
+        'z' { Start-Process "http://${MidgardIP}:8085" }
+        'p' { Start-Process "http://${MidgardIP}:9696" }
         '9' { Start-Process "http://${AdGuardIP}" }
-        'A', 'a' { Start-Process "http://${MidgardIP}:32400/web" }
-        'B', 'b' { Start-Process "https://${ProxmoxIP}:8006" }
-        'C', 'c' { Start-Process "https://${MidgardIP}:8443" }
-        'S', 's' { Test-HomelabHealth }
-        'M', 'm' { Show-ArchitectureMap }
-        'Q', 'q' { Write-Host "Tschüss!" -ForegroundColor Yellow; break }
+        'a' { Start-Process "http://${MidgardIP}:32400/web" }
+        'b' { Start-Process "https://${ProxmoxIP}:8006" }
+        'c' { Start-Process "https://${MidgardIP}:8443" }
+        's' { Test-HomelabHealth }
+        'm' { Show-ArchitectureMap }
+        'q' { Write-Host "Tschüss!" -ForegroundColor Yellow; break }
         default { Write-Host "Ungültige Auswahl!" -ForegroundColor Red; Start-Sleep -Seconds 1 }
     }
 } while ($choice -notin @('Q', 'q'))
