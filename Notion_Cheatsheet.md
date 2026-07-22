@@ -90,3 +90,13 @@
   cd C:\Antigravity\HomeLab
   .\homelab.ps1
   ```
+
+---
+
+## 🛑 6. Tiny11 (Hugin) Auto-Shutdown Trick
+
+Um Ressourcen auf dem Proxmox-Server zu sparen, ist die Hugin-VM so konfiguriert, dass sie 10 Minuten nach dem Schließen des Browser-Tabs (RDP-Disconnect) automatisch herunterfährt.
+
+**Einrichtung über Windows Aufgabenplanung (`taskschd.msc`):**
+1. **Timer starten**: Aufgabe erstellen -> Trigger: *Bei Trennung von Benutzersitzung* -> Aktion: `shutdown.exe /s /t 600`
+2. **Timer abbrechen**: Aufgabe erstellen -> Trigger: *Bei Verbindung mit Benutzersitzung* -> Aktion: `shutdown.exe /a`
