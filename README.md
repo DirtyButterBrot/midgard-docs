@@ -20,7 +20,7 @@ The homelab runs on a single bare-metal node managed by Proxmox VE.
 graph TD
     Hardware[HP EliteBook 850 G6<br>Hardware] --> Valhalla
     
-    subgraph Valhalla [Proxmox VE - 10.0.0.250]
+    subgraph Valhalla ["Proxmox VE - 10.0.0.250"]
         Midgard(VM 100: Ubuntu Server<br>10.0.0.251)
         Heimdall(LXC 101: AdGuard Home<br>10.0.0.252)
         Hugin(VM: Tiny11 Windows<br>10.0.0.248)
@@ -28,7 +28,7 @@ graph TD
     
     Midgard --> Docker[Docker Engine]
     
-    subgraph Docker Stacks [/opt/stacks]
+    subgraph DockerStacks ["/opt/stacks"]
         NPM[Nginx Proxy Manager]
         Authelia[Authelia SSO]
         Media[ARRR Stack & Plex]
