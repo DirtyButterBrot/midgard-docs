@@ -10,8 +10,9 @@
 
 | Service | HTTPS URL | Auth / Protection | Status |
 | :--- | :--- | :--- | :---: |
-| **Dashy Dashboard** | [dashy.valhalla-lab.duckdns.org](https://dashy.valhalla-lab.duckdns.org) | Authelia 2FA / SSO | 🟢 |
+| **Homepage Dashboard** | [home.valhalla-lab.duckdns.org](https://home.valhalla-lab.duckdns.org) | Authelia 2FA / SSO | 🟢 |
 | **Authelia SSO Portal** | [auth.valhalla-lab.duckdns.org](https://auth.valhalla-lab.duckdns.org) | SSO Identity Provider | 🟢 |
+| **Guacamole RDP** | [rdp.valhalla-lab.duckdns.org](https://rdp.valhalla-lab.duckdns.org) | Authelia 2FA / SSO + Web-Auth | 🟢 |
 | **Plex Media Server** | [plex.valhalla-lab.duckdns.org](https://plex.valhalla-lab.duckdns.org) | Native Plex Auth (Direct Play) | 🟢 |
 | **Dockge Manager** | [dockge.valhalla-lab.duckdns.org](https://dockge.valhalla-lab.duckdns.org) | Authelia 2FA / SSO | 🟢 |
 | **BirdNET Analyzer** | [birdnet.valhalla-lab.duckdns.org](https://birdnet.valhalla-lab.duckdns.org) | Authelia 2FA / SSO | 🟢 |
@@ -27,7 +28,9 @@
 | **Proxmox VE** | [https://10.0.0.250:8006](https://10.0.0.250:8006) | Bare-Metal Hypervisor (`valhalla`) | Laptop Hardware |
 | **Ubuntu Docker VM** | [http://10.0.0.251](http://10.0.0.251) | Docker Host (`midgard`) | Proxmox VM 100 |
 | **AdGuard Home** | [http://10.0.0.252](http://10.0.0.252) | DNS & Ad-Blocker (`heimdall`) | Proxmox LXC 101 |
+| **Hugin (Tiny11)** | `10.0.0.248:3389` | Windows 11 Desktop VM | Proxmox VM |
 | **Tailscale VPN Router** | https://login.tailscale.com | VPN Subnet Router (`bifroest`) | Docker Container |
+| **Apache Guacamole** | [http://10.0.0.251:8088](http://10.0.0.251:8088) | Browser RDP Bridge | Docker Container |
 | **Uptime Kuma** | [http://10.0.0.251:3001](http://10.0.0.251:3001) | System & Uptime Monitoring | Docker Container |
 | **BirdNET Go** | [http://10.0.0.251:8082](http://10.0.0.251:8082) | Bird Song AI Classification | Docker Container |
 | **Tautulli** | [http://10.0.0.251:8181](http://10.0.0.251:8181) | Plex Monitoring & Stats | Docker Container |
@@ -38,7 +41,7 @@
 | **Prowlarr** | [http://10.0.0.251:9696](http://10.0.0.251:9696) | Usenet Indexer Manager | Docker Container |
 | **Nginx Proxy Manager** | [http://10.0.0.251:81](http://10.0.0.251:81) | Reverse Proxy Admin | Docker Container |
 | **Dockge Manager** | [http://10.0.0.251:5001](http://10.0.0.251:5001) | Compose Stack Manager | Docker Container |
-| **Dashy Dashboard** | [http://10.0.0.251:4000](http://10.0.0.251:4000) | Central Dashboard | Docker Container |
+| **Homepage Dashboard** | [http://10.0.0.251:3008](http://10.0.0.251:3008) | Central Dashboard | Docker Container |
 | **Watchtower** | [http://10.0.0.251:8086](http://10.0.0.251:8086) | Auto-Updater API | Docker Container |
 | **Authelia Auth** | [http://10.0.0.251:9091](http://10.0.0.251:9091) | SSO Engine | Docker Container |
 | **Plex Media Server** | [http://10.0.0.251:32400/web](http://10.0.0.251:32400/web) | Media Server | Docker Container |
@@ -53,6 +56,8 @@
 | **Midgard (Docker VM)** | `odin` | `[SECRET]` / SSH Key | `ssh odin@10.0.0.251` |
 | **Valhalla (Proxmox)** | `root` | System Password | `ssh root@10.0.0.250` |
 | **Heimdall (AdGuard)** | `root` | LXC Root Password | `ssh root@10.0.0.252` |
+| **Hugin (Tiny11)** | `hugin` | Windows Password | *(Via Guacamole)* |
+| **Guacamole Web** | `odin` | `valhalla` | *(Web Login)* |
 | **Tailscale Portal** | Google/Microsoft | OAuth Login | [login.tailscale.com](https://login.tailscale.com) |
 | **Authelia Portal** | `odin` | `[SECRET]` | *(Web Login)* |
 | **NPM Admin** | `admin@example.com` | `changeme` | *(Web Login)* |
@@ -67,7 +72,8 @@
 * `/opt/stacks/tailscale` $\rightarrow$ Tailscale Subnet Router (`bifroest` - `docker-compose.yml`)
 * `/opt/stacks/uptime-kuma` $\rightarrow$ Uptime Kuma Monitoring (`docker-compose.yml`)
 * `/opt/stacks/watchtower` $\rightarrow$ Auto-Updater (`docker-compose.yml`)
-* `/opt/stacks/dashy` $\rightarrow$ Dashy Dashboard (`my-conf.yml`, `docker-compose.yml`)
+* `/opt/stacks/homepage` $\rightarrow$ Homepage Dashboard (`config/`, `docker-compose.yml`)
+* `/opt/stacks/guacamole` $\rightarrow$ Apache Guacamole (`config/`, `docker-compose.yml`)
 * `/opt/stacks/authelia` $\rightarrow$ Authelia SSO (`config/configuration.yml`, `users_database.yml`)
 * `/opt/stacks/npm` $\rightarrow$ Nginx Proxy Manager
 * `/opt/stacks/dockge` $\rightarrow$ Dockge Stack Manager
@@ -78,7 +84,7 @@
 
 ## ⚡ 5. Local Management Script
 
-* **Script Path**: [`homelab.ps1`](file:///c:/Antigravity/HomeLab/homelab.ps1)
+* **Script Path**: [`homelab.ps1`](file:///opt/stacks/homelab.ps1) (Also available locally)
 * **Quick Launch**:
   ```powershell
   cd C:\Antigravity\HomeLab

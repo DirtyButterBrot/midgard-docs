@@ -12,6 +12,7 @@ The Homelab runs on an **HP EliteBook 850 G6** (Bare-Metal) acting as the main v
 * **Valhalla (Proxmox VE)**: The hypervisor handling hardware resources (`10.0.0.250`).
 * **Midgard (Ubuntu VM)**: The primary Docker engine hosting all critical services (`10.0.0.251`).
 * **Heimdall (LXC)**: Dedicated container for AdGuard Home DNS (`10.0.0.252`).
+* **Hugin (Tiny11 VM)**: A deeply debloated Windows 11 VM serving as a dedicated RDP workstation, accessible directly through the browser.
 
 All external traffic is routed through **Nginx Proxy Manager**, securely gated by **Authelia** (SSO/2FA), and accessible via the `valhalla-lab.duckdns.org` domain. Remote internal access is provided securely via a **Tailscale Subnet Router**.
 
@@ -21,8 +22,9 @@ All external traffic is routed through **Nginx Proxy Manager**, securely gated b
 
 | Service | HTTPS URL | Auth / Protection |
 | :--- | :--- | :--- |
-| **Dashy Dashboard** | [dashy.valhalla-lab.duckdns.org](https://dashy.valhalla-lab.duckdns.org) | 🔒 Authelia 2FA / SSO |
+| **Homepage Dashboard** | [home.valhalla-lab.duckdns.org](https://home.valhalla-lab.duckdns.org) | 🔒 Authelia 2FA / SSO |
 | **Authelia SSO Portal** | [auth.valhalla-lab.duckdns.org](https://auth.valhalla-lab.duckdns.org) | 🔒 SSO Identity Provider |
+| **Guacamole RDP (Hugin)** | [rdp.valhalla-lab.duckdns.org](https://rdp.valhalla-lab.duckdns.org) | 🔒 Authelia 2FA / SSO + Web-Auth |
 | **Plex Media Server** | [plex.valhalla-lab.duckdns.org](https://plex.valhalla-lab.duckdns.org) | 🛡️ Native Plex Auth |
 | **Dockge Manager** | [dockge.valhalla-lab.duckdns.org](https://dockge.valhalla-lab.duckdns.org) | 🔒 Authelia 2FA / SSO |
 | **BirdNET Analyzer** | [birdnet.valhalla-lab.duckdns.org](https://birdnet.valhalla-lab.duckdns.org) | 🔒 Authelia 2FA / SSO |
@@ -39,6 +41,7 @@ These services are only accessible within the local LAN (`10.0.0.0/24`) or via T
 | **Proxmox VE** | `https://10.0.0.250:8006` | Bare-Metal Hypervisor (`valhalla`) |
 | **AdGuard Home** | `http://10.0.0.252:80` | Network-wide Adblocker (`heimdall`) |
 | **Tailscale Router** | `bifroest` | VPN Subnet Router |
+| **Apache Guacamole** | `http://10.0.0.251:8088` | Browser RDP Bridge |
 | **UniFi Controller** | `https://10.0.0.251:8443` | Ubiquiti Network App |
 | **Tautulli** | `http://10.0.0.251:8181` | Plex Analytics |
 | **Overseerr** | `http://10.0.0.251:5055` | Media Requests |
@@ -56,6 +59,9 @@ These services are only accessible within the local LAN (`10.0.0.0/24`) or via T
 All containers run inside `/opt/stacks/` on `midgard`. 
 
 > **Important Security Note:** The `docker-compose.yml` files are versioned in a separate repository (`midgard-stacks`). However, all persistent data and configuration files are located inside `*/config/` or `*/data/` directories, which are explicitly ignored via `.gitignore` to prevent secret leakage. Passwords in compose files are sourced dynamically via `.env` files.
+
+### Service Discovery (Homepage)
+We use a **Docker Label Strategy** for the main dashboard. Every `docker-compose.yml` defines `homepage.group`, `homepage.name`, and `homepage.href` labels. This allows the Homepage dashboard to automatically discover and list new services without manual configuration!
 
 Media is mounted directly to the VM via NTFS:
 * `/mnt/media/MOVIES`
