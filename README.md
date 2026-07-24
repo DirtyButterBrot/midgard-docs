@@ -142,6 +142,12 @@ Because the downloader (SABnzbd) and the managers (Radarr/Sonarr) see the *exact
 * **NPM WebSockets:** Guacamole requires WebSockets. In NPM, the `/websocket-tunnel` route explicitly disables `proxy_buffering` so the screen stream doesn't lag.
 * **Auto-Shutdown:** To save RAM on Proxmox, the Tiny11 VM runs a Scheduled Task triggered by *RDP Disconnect* (which fires when you close the browser tab). It initiates a `shutdown /s /t 600` (10-minute timer). If you reconnect within 10 minutes, a second task `shutdown /a` aborts the shutdown.
 
+### Disaster Recovery & Cloud Backups
+To protect against catastrophic hardware failure, Proxmox is configured to automatically back up all VMs to a 5TB external USB drive, which is then securely mirrored to Google Drive.
+* **NFS Storage Bridge:** The 5TB USB drive is passed through to Midgard (mounted at `/mnt/media`). Midgard exposes the `/mnt/media/ProxmoxBackups` folder back to Proxmox via an NFS share. Proxmox mounts this NFS share (`MidgardBackup`) to store all local `vzdump` archives, ensuring the limited 250GB internal SSD never fills up.
+* **Encrypted Cloud Sync:** A global hook script (`/root/rclone-hook.sh` triggered via `/etc/vzdump.conf`) runs automatically after every backup job. It uses `rclone sync` to mirror the NFS backup folder to a `crypt` remote on Google Drive. Google only sees client-side encrypted gibberish.
+* **Retention Management:** Retention policies (e.g., "Keep last 3") are managed natively in the Proxmox Backup UI. Because `rclone sync` creates a perfect 1:1 mirror, any old backups deleted locally by Proxmox are automatically pruned from Google Drive, preventing cloud storage bloat.
+
 ---
 
 ## 🔑 5. Credentials & SSH Reference
@@ -171,3 +177,17 @@ cd C:\Antigravity\HomeLab
 ```
 
 *(You can also find this script at `/opt/stacks/homelab.ps1` on the server).*
+
+---
+
+## 🔧 7. Troubleshooting & Known Issues
+
+### Intel e1000e NIC "Detected Hardware Unit Hang"
+The bare-metal Proxmox host (Valhalla) uses an Intel NIC that relies on the `e1000e` Linux driver. Under certain network loads, this hardware can freeze (link stays up, but no traffic routes) and logs `Detected Hardware Unit Hang` in `dmesg`.
+
+**Fix Applied**: Hardware offloading features (TSO/GSO) have been explicitly disabled. This is a persistent fix implemented in `/etc/network/interfaces` on Valhalla:
+```bash
+iface nic0 inet manual
+        post-up ethtool -K nic0 tso off gso off
+```
+*If this occurs again (which is highly unlikely), disconnecting and reconnecting the physical ethernet cable resets the hardware.*
